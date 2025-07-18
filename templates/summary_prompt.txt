@@ -1,0 +1,3 @@
+Summarize the following transcript into bullet points, focusing on key ideas, important names, and logic:
+
+{transcript}
