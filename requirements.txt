@@ -2,6 +2,7 @@ streamlit
 openai
 python-dotenv
 youtube-transcript-api
+deep-translator
 nltk
 tiktoken
 langchain
