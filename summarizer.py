@@ -1,7 +1,7 @@
 import openai
 
 from dotenv import load_dotenv
-from openai import RateLimitError, AuthenticationError, APIError
+from openai import RateLimitError, APIError, AuthenticationError 
 
 load_dotenv()
 
