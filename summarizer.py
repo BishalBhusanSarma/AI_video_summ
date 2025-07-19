@@ -1,5 +1,5 @@
 from openai import OpenAI
-from openai.types.errors import RateLimitError, APIError, AuthenticationError
+from openai import OpenAIError, RateLimitError, APIError, AuthenticationError
 
 from dotenv import load_dotenv
 
