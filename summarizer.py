@@ -1,10 +1,13 @@
 import openai
 
 from dotenv import load_dotenv
-import os
+
 
 load_dotenv()
-openai.api_key = os.getenv("groq_api_key")
+
+import streamlit as st
+
+openai.api_key = st.secrets["groq_api_key"]
 
 
 openai.api_base = "https://api.groq.com/openai/v1"
