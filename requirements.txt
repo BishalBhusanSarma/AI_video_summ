@@ -1,5 +1,6 @@
 streamlit
 openai
+sklearn
 python-dotenv
 youtube-transcript-api
 deep-translator
