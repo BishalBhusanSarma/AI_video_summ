@@ -5,6 +5,8 @@ python-dotenv
 youtube-transcript-api==1.1.1
 deep-translator
 nltk
+langdetect
+requests
 tiktoken
 langchain
 langchain-community
