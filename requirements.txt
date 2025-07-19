@@ -1,6 +1,10 @@
 streamlit
+openai
+python-dotenv
 youtube-transcript-api
-googletrans==4.0.0-rc1
-langdetect
-langchain
+deep-translator
+nltk
 tiktoken
+langchain
+langchain-community
+groq
