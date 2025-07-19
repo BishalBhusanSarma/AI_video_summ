@@ -1,3 +1,5 @@
+import nltk
+nltk.download('punkt')
 from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled, NoTranscriptFound
 from youtube_transcript_api.formatters import TextFormatter
 from youtube_transcript_api._errors import CouldNotRetrieveTranscript
@@ -29,6 +31,8 @@ def translate_to_english(text, chunk_size=5000):
     translator = GoogleTranslator(source='auto', target='en')
     translated = []
 
+    print("🔍 Detected language, translating to English...")
+
     for i in range(0, len(text), chunk_size):
         chunk = text[i:i+chunk_size]
         if not chunk.strip():
@@ -52,25 +56,44 @@ def translate_to_english(text, chunk_size=5000):
 
     return " ".join(translated)
 
+import os
+
 def get_transcript(url):
+    """
+    Retrieve the transcript of a YouTube video, optionally using a proxy.
+    # Set proxy manually or via .env as YOUTUBE_PROXY (e.g., http://127.0.0.1:8080)
+    Set the environment variable YOUTUBE_PROXY to use a proxy (e.g. http://127.0.0.1:8080).
+    """
     video_id = get_video_id(url)
+
+    proxy = os.getenv("YOUTUBE_PROXY")  # optional: set this in .env or system environment
+    # Example: export YOUTUBE_PROXY="http://127.0.0.1:8080"
+    proxies = {'http': proxy, 'https': proxy} if proxy else None
 
     try:
         # Try to get an English transcript first
-        transcript = YouTubeTranscriptApi.get_transcript(video_id, languages=['en'])
+        transcript = YouTubeTranscriptApi.get_transcript(video_id, languages=['en'], proxies=proxies)
     except NoTranscriptFound:
         # Fallback: Get all available transcripts and pick the first one (even if not English)
         try:
             transcripts = YouTubeTranscriptApi.list_transcripts(video_id)
             transcript_obj = transcripts.find_transcript([t.language_code for t in transcripts])
-            transcript = transcript_obj.fetch()
+            transcript = transcript_obj.fetch(proxies=proxies)
         except Exception as e:
             raise RuntimeError(f"❌ No usable transcripts found: {e}")
     except Exception as e:
-        raise RuntimeError(f"❌ Error retrieving transcript: {e}")
+        print(f"⚠️ Proxy request failed: {e}, retrying without proxy...")
+        try:
+            transcript = YouTubeTranscriptApi.get_transcript(video_id, languages=['en'])
+        except Exception as e2:
+            raise RuntimeError(f"❌ Error retrieving transcript: {e2}")
 
     text = " ".join([x.text if hasattr(x, "text") else x['text'] for x in transcript])
-    lang = detect(text)
+    try:
+        lang = detect(text)
+    except:
+        print("⚠️ Language detection failed, assuming non-English.")
+        lang = "unknown"
     if lang != 'en':
         text = translate_to_english(text)
 
