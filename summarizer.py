@@ -1,16 +1,13 @@
-import openai
+from openai import OpenAI
+from openai.types.errors import RateLimitError, APIError, AuthenticationError
 
 from dotenv import load_dotenv
-from openai import RateLimitError, APIError, AuthenticationError 
 
 load_dotenv()
 
 import streamlit as st
 
-openai.api_key = st.secrets["groq_api_key"]
-
-
-openai.api_base = "https://api.groq.com/openai/v1"
+client = OpenAI(api_key=st.secrets["groq_api_key"], base_url="https://api.groq.com/openai/v1")
 
 from text_chunker import prepare_transcript_chunks
 
@@ -19,7 +16,7 @@ import time
 def run_groq_llama3(prompt, retries=5, delay=6):
     for attempt in range(retries):
         try:
-            response = openai.ChatCompletion.create(
+            response = client.chat.completions.create(
                 model="llama3-8b-8192",
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.7
