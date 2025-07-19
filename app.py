@@ -6,6 +6,7 @@ from summarizer import generate_summary
 from concept_links import generate_google_search_links
 from text_chunker import prepare_transcript_chunks
 
+from openai.error import RateLimitError, AuthenticationError, APIError
 st.set_page_config(page_title="AI YouTube Notes App", layout="wide")
 st.title("🎬 YouTube Video AI Notes + Learning Resources")
 
