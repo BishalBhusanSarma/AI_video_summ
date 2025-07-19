@@ -3,6 +3,7 @@ openai
 python-dotenv
 youtube-transcript-api
 nltk
-langchain
 tiktoken
+langchain
+langchain-community
 groq
