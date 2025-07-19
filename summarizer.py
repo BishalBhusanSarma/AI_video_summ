@@ -15,7 +15,7 @@ openai.api_base = "https://api.groq.com/openai/v1"
 from text_chunker import prepare_transcript_chunks
 
 import time
-from openai.error import RateLimitError
+from openai import error
 
 def run_groq_llama3(prompt, retries=5, delay=6):
     for attempt in range(retries):
@@ -26,7 +26,7 @@ def run_groq_llama3(prompt, retries=5, delay=6):
                 temperature=0.7
             )
             return response.choices[0].message.content.strip()
-        except RateLimitError as e:
+        except error.RateLimitError as e:
             print(f"Rate limit reached. Retrying in {delay} seconds... (Attempt {attempt + 1}/{retries})")
             time.sleep(delay)
     raise Exception("Exceeded maximum retry attempts due to rate limiting.")
