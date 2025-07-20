@@ -6,7 +6,7 @@ Paste a YouTube link. Get:
 - Google links for research
 
 ### 🧠 Powered by:
-- LLaMA 3.2 (via Ollama)
+- LLaMA 3.2 (via Ollama)/ groq
 - LangChain
 - Streamlit
 
