@@ -1,3 +1,14 @@
+#
+# Uncomment this if you have Ollama running locally and want to use a local LLM instead of Groq
+# import subprocess
+#
+# def run_llama3_local(prompt):
+#     result = subprocess.run(
+#         ["ollama", "run", "llama3", prompt],
+#         capture_output=True,
+#         text=True
+#     )
+#     return result.stdout.strip()
 from openai import OpenAI
 from openai import OpenAIError, RateLimitError, APIError, AuthenticationError
 
@@ -13,6 +24,11 @@ from text_chunker import prepare_transcript_chunks
 
 import time
 
+#
+# Uncomment below to use local LLM via Ollama instead of Groq API
+# def run_groq_llama3(prompt, retries=5, delay=6):
+#     return run_llama3_local(prompt)
+
 def run_groq_llama3(prompt, retries=5, delay=6):
     for attempt in range(retries):
         try:
@@ -26,6 +42,10 @@ def run_groq_llama3(prompt, retries=5, delay=6):
             print(f"Rate limit reached. Retrying in {delay} seconds... (Attempt {attempt + 1}/{retries})")
             time.sleep(delay)
     raise Exception("Exceeded maximum retry attempts due to rate limiting.")
+
+# Uncomment this to use Ollama locally instead of Groq
+# def run_groq_llama3(prompt, retries=5, delay=6):
+#     return run_llama3_local(prompt)
 
 def refine_summary(summaries):
     combined = "\n\n".join(summaries)
